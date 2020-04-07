@@ -44,4 +44,16 @@
         android:text="@string/pause"
         app:layout_constraintBottom_toBottomOf="@+id/buttonStop"
         app:layout_constraintStart_toStartOf="@+id/textViewCounter" />
+
+    <TextView
+        android:id="@+id/textViewCounterPomos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2 Pomodoros" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

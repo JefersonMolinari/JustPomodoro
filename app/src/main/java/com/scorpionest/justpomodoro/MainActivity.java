@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int TIME_MIN_LONG_BREAK = 15;
     private static final int TIME_RATE_MILISEC = 1000;
     private static final int TIME_MIN_TO_SEC = 60;
-    private static final int SECTIONS_TO_LONG_BREAK = 4;
+    private static final int SECTIONS_TO_LONG_BREAK = 40;
 
     private static final String DISPLAY_DISPLAY = "%02d:%02d";
     private static final String DISPLAY_START = "%02d:00";
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnStop;
     Button btnPause;
     TextView counterView;
+    TextView counterPomodoroView;
 
     CountDownTimer timer;
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         counterView = (TextView) findViewById(R.id.textViewCounter);
+        counterPomodoroView = (TextView) findViewById(R.id.textViewCounterPomos);
         btnStart = (Button) findViewById(R.id.buttonStart);
         btnStop = (Button) findViewById(R.id.buttonStop);
         btnPause = (Button) findViewById(R.id.buttonPause);
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     timer.cancel();
                     timer = null;
                 }
+                counterPomodoro = 0;
                 currentCycle = "";
                 nextSection();
             }
@@ -123,5 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
         counterInSecs = counterInMins * TIME_MIN_TO_SEC;
         counterView.setText(String.format(DISPLAY_START, counterInMins));
+        counterPomodoroView.setText(String.format("%d Pomodoro%s",counterPomodoro, counterPomodoro == 1 ? "" : "s"));
     }
 }
