@@ -1,14 +1,17 @@
 package com.scorpionest.justpomodoro;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
+import com.scorpionest.justpomodoro.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    ActivityMainBinding bd;
 
     private static final int TIME_MIN_POMODORO = 25;
     private static final int TIME_MIN_SHORT_BREAK = 5;
@@ -29,12 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentCycle = "";
 
-    Button btnStart;
-    Button btnStop;
-    Button btnPause;
-    TextView counterView;
-    TextView counterPomodoroView;
-
     CountDownTimer timer;
 
     @Override
@@ -42,30 +39,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        counterView = (TextView) findViewById(R.id.textViewCounter);
-        counterPomodoroView = (TextView) findViewById(R.id.textViewCounterPomos);
-        btnStart = (Button) findViewById(R.id.buttonStart);
-        btnStop = (Button) findViewById(R.id.buttonStop);
-        btnPause = (Button) findViewById(R.id.buttonPause);
+        bd = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         nextSection();
 
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        bd.buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnStart.setVisibility(View.INVISIBLE);
-                btnPause.setVisibility(View.VISIBLE);
+                bd.buttonStart.setVisibility(View.INVISIBLE);
+                bd.buttonPause.setVisibility(View.VISIBLE);
                 timer = startCounter();
                 timer.start();
             }
         });
 
-        btnPause.setOnClickListener(new View.OnClickListener(){
+        bd.buttonPause.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                btnStart.setVisibility(View.VISIBLE);
-                btnPause.setVisibility(View.INVISIBLE);
+                bd.buttonStart.setVisibility(View.VISIBLE);
+                bd.buttonPause.setVisibility(View.INVISIBLE);
                 if(timer != null){
                     timer.cancel();
                     timer = null;
@@ -73,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnStop.setOnClickListener(new View.OnClickListener(){
+        bd.buttonStop.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -94,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 timerMinutes = counterInSecs / TIME_MIN_TO_SEC;
                 timerSeconds = counterInSecs % TIME_MIN_TO_SEC;
-                counterView.setText(String.format(DISPLAY_DISPLAY, timerMinutes, timerSeconds));
+                bd.textViewCounter.setText(String.format(DISPLAY_DISPLAY, timerMinutes, timerSeconds));
                 counterInSecs--;
             }
 
@@ -106,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextSection() {
-        btnStart.setVisibility(View.VISIBLE);
-        btnPause.setVisibility(View.INVISIBLE);
+        bd.buttonStart.setVisibility(View.VISIBLE);
+        bd.buttonPause.setVisibility(View.INVISIBLE);
 
         int counterInMins = 0;
 
@@ -125,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         counterInSecs = counterInMins * TIME_MIN_TO_SEC;
-        counterView.setText(String.format(DISPLAY_START, counterInMins));
-        counterPomodoroView.setText(String.format("%d Pomodoro%s",counterPomodoro, counterPomodoro == 1 ? "" : "s"));
+        bd.textViewCounter.setText(String.format(DISPLAY_START, counterInMins));
+        bd.textViewCounterPomos.setText(String.format("%d Pomodoro%s",counterPomodoro, counterPomodoro == 1 ? "" : "s"));
     }
 }
