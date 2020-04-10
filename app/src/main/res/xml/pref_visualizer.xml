@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/settings_category_time_label">
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_pomodoro_time_default"
+            android:inputType="numberDecimal"
+            android:key="@string/settings_pomodoro_time_key"
+            android:singleLine="true"
+            android:title="@string/settings_pomodoro_time_label" />
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_short_break_time_default"
+            android:inputType="text"
+            android:key="@string/settings_short_break_time_key"
+            android:singleLine="true"
+            android:title="@string/settings_short_break_time_label" />
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_long_break_time_default"
+            android:inputType="numberDecimal"
+            android:key="@string/settings_long_break_time_key"
+            android:title="@string/settings_long_break_time_label"/>
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_long_break_freq_time_default"
+            android:inputType="numberDecimal"
+            android:key="@string/settings_long_break_freq_time_key"
+            android:title="@string/settings_long_break_freq_time_label"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/settings_auto_start_timer_key"
+            android:title="@string/settings_auto_start_timer_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="@string/settings_category_sound_label">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_sound_timer_start_key"
+            android:title="@string/settings_sound_timer_start_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_sound_timer_end_key"
+            android:title="@string/settings_sound_timer_end_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+
+        <ListPreference
+            android:defaultValue="@string/settings_pomodoro_sound_default"
+            android:entries="@array/settings_pomodoro_sound_labels"
+            android:entryValues="@array/settings_pomodoro_sound_values"
+            android:key="@string/settings_pomodoro_sound_key"
+            android:title="@string/settings_pomodoro_sound_label"/>
+
+        <ListPreference
+            android:defaultValue="@string/settings_short_break_sound_default"
+            android:entries="@array/settings_pomodoro_sound_labels"
+            android:entryValues="@array/settings_pomodoro_sound_values"
+            android:key="@string/settings_short_break_sound_key"
+            android:title="@string/settings_short_break_sound_label"/>
+
+        <ListPreference
+            android:defaultValue="@string/settings_long_break_sound_default"
+            android:entries="@array/settings_pomodoro_sound_labels"
+            android:entryValues="@array/settings_pomodoro_sound_values"
+            android:key="@string/settings_long_break_sound_key"
+            android:title="@string/settings_long_break_sound_label"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="@string/settings_category_configurations_label">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_config_do_not_disturb_mode_key"
+            android:title="@string/settings_config_do_not_disturb_mode_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_config_vibrate_key"
+            android:title="@string/settings_config_vibrate_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_config_rotate_key"
+            android:title="@string/settings_config_rotate_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_config_prevent_screen_lock_key"
+            android:title="@string/settings_config_prevent_screen_lock_label"
+            android:summaryOff="Not Enabled"
+            android:summaryOn="Enabled" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -4,4 +4,88 @@
     <string name="stop">Stop</string>
     <string name="pause">Pause</string>
     <string name="reset">Reset</string>
+    <string name="settings_title">Settings</string>
+    <string name="pomodoro">Pomodoro</string>
+    <string name="pomodoros">Pomodoros</string>
+    
+    <!-- Strings Preference Categories [CHAR LIMIT=30] -->
+    <string name="settings_category_time_label">TIME</string>
+    <string name="settings_category_sound_label">SOUND</string>
+    <string name="settings_category_configurations_label">CONFIGURATIONS</string>
+
+    <!-- Strings For Pomodoro Time Preference [CHAR LIMIT=30] -->
+    <string name="settings_pomodoro_time_default">25</string>
+    <string name="settings_pomodoro_time_key">pomodoro_time</string>
+    <string name="settings_pomodoro_time_label">Pomodoro</string>
+
+    <!-- Strings For Short Break Time Preference [CHAR LIMIT=30] -->
+    <string name="settings_short_break_time_default">5</string>
+    <string name="settings_short_break_time_key">short_break_time</string>
+    <string name="settings_short_break_time_label">Short Break</string>
+
+    <!-- Strings For Long Break Time Preference [CHAR LIMIT=30] -->
+    <string name="settings_long_break_time_default">15</string>
+    <string name="settings_long_break_time_key">long_break_time</string>
+    <string name="settings_long_break_time_label">Long Break</string>
+
+    <!-- Strings For Long Break Frequency Time Preference [CHAR LIMIT=30] -->
+    <string name="settings_long_break_freq_time_default">4</string>
+    <string name="settings_long_break_freq_time_key">long_break_freq_time</string>
+    <string name="settings_long_break_freq_time_label">Long Break Frequency</string>
+
+    <!-- Strings For Auto-start timer Preference [CHAR LIMIT=30] -->
+    <string name="settings_auto_start_timer_key">auto_start_timer</string>
+    <string name="settings_auto_start_timer_label">Auto-start Timer</string>
+
+    <!-- Strings For Play sound when timer starts Preference [CHAR LIMIT=30] -->
+    <string name="settings_sound_timer_start_key">sound_timer_start</string>
+    <string name="settings_sound_timer_start_label">Play sound when timer starts</string>
+
+    <!-- Strings For Play sound when timer ends Preference [CHAR LIMIT=30] -->
+    <string name="settings_sound_timer_end_key">sound_timer_end</string>
+    <string name="settings_sound_timer_end_label">Play sound when timer ends</string>
+
+    <!-- Strings For Pomodoro Sound Preference [CHAR LIMIT=30] -->
+    <string name="settings_pomodoro_sound_default">@string/settings_sound_option_one_value</string>
+    <string name="settings_pomodoro_sound_key">pomodoro_sound</string>
+    <string name="settings_pomodoro_sound_label">Pomodoro Sound</string>
+
+    <!-- Strings For Short Break Sound Preference [CHAR LIMIT=30] -->
+    <string name="settings_short_break_sound_default">@string/settings_sound_option_one_value</string>
+    <string name="settings_short_break_sound_key">short_break_sound</string>
+    <string name="settings_short_break_sound_label">Short Break Sound</string>
+
+    <!-- Strings For Long Break Sound Preference [CHAR LIMIT=30] -->
+    <string name="settings_long_break_sound_default">@string/settings_sound_option_one_value</string>
+    <string name="settings_long_break_sound_key">long_break_sound</string>
+    <string name="settings_long_break_sound_label">Long Break Sound</string>
+
+    <!-- Label for pomodoro_sound option [CHAR LIMIT=20] -->
+    <string name="settings_sound_option_one_label">Sound One</string>
+    <string name="settings_sound_option_one_value" translatable="false">sound_option_one</string>
+
+    <!-- Label for pomodoro_sound option [CHAR LIMIT=20] -->
+    <string name="settings_sound_option_two_label">Sound Two</string>
+    <string name="settings_sound_option_two_value" translatable="false">sound_option_two</string>
+
+    <!-- Label for pomodoro_sound option [CHAR LIMIT=20] -->
+    <string name="settings_sound_option_three_label">Sound Three</string>
+    <string name="settings_sound_option_three_value" translatable="false">sound_option_three</string>
+
+    <!-- Strings For Do Not Disturt Mode Preference [CHAR LIMIT=30] -->
+    <string name="settings_config_do_not_disturb_mode_key">config_do_not_disturb_mode</string>
+    <string name="settings_config_do_not_disturb_mode_label">Do Not Disturb Mode</string>
+
+    <!-- Strings For Vibrate Preference [CHAR LIMIT=30] -->
+    <string name="settings_config_vibrate_key">config_vibrate</string>
+    <string name="settings_config_vibrate_label">Vibrate</string>
+
+    <!-- Strings For Rotate Preference [CHAR LIMIT=30] -->
+    <string name="settings_config_rotate_key">config_rotate</string>
+    <string name="settings_config_rotate_label">Rotate</string>
+
+    <!-- Strings For Prevent Screen Lock Preference [CHAR LIMIT=30] -->
+    <string name="settings_config_prevent_screen_lock_key">prevent_screen_lock</string>
+    <string name="settings_config_prevent_screen_lock_label">Prevent Screen Lock</string>
+
 </resources>
