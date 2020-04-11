@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="settings_auto_start_timer_default">false</bool>
+    
+    <bool name="settings_sound_timer_start_default">true</bool>
+    <bool name="settings_sound_timer_end_default">true</bool>
+
+    <bool name="settings_config_do_not_disturb_mode_default">false</bool>
+    <bool name="settings_config_vibrate_default">false</bool>
+    <bool name="settings_config_rotate_default">false</bool>
+    <bool name="settings_config_prevent_screen_lock_default">false</bool>
+</resources>
