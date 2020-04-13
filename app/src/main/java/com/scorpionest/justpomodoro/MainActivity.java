@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     ActivityMainBinding bd;
 
-    private static final int TIME_RATE_MILISEC = 1000;
+    private static final int TIME_RATE_MILISEC = 100;
     private static final int TIME_MIN_TO_SEC = 60;
     private static final String DISPLAY_DISPLAY = "%02d:%02d";
     private static final String DISPLAY_START = "%02d:00";
@@ -227,7 +227,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         counterInSecs = counterInMins * TIME_MIN_TO_SEC;
         bd.textViewCounter.setText(String.format(DISPLAY_START, counterInMins));
-        bd.textViewCounterPomos.setText(String.format("%d Pomodoro%s",counterPomodoro, counterPomodoro == 1 ? "" : "s"));
+        bd.textViewCounterPomos.setText(String.format("%d %s%s",
+                counterPomodoro, getString(R.string.pomodoro), counterPomodoro == 1 ? "" : "s"));
     }
 
     @Override
