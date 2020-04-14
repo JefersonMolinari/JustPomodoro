@@ -39,14 +39,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textViewCounter" />
 
-        <Button
-            android:id="@+id/buttonPause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pause"
-            app:layout_constraintBottom_toBottomOf="@+id/buttonStop"
-            app:layout_constraintStart_toStartOf="@+id/textViewCounter" />
-
         <TextView
             android:id="@+id/textViewCounterPomos"
             android:layout_width="wrap_content"

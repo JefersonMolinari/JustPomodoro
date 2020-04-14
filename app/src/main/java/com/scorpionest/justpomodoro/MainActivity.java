@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +20,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     ActivityMainBinding bd;
 
-    private static final int TIME_RATE_MILISEC = 100;
+    private static final int TIME_RATE_MILISEC = 1000;
     private static final int TIME_MIN_TO_SEC = 60;
-    private static final String DISPLAY_DISPLAY = "%02d:%02d";
+    private static final String DISPLAY_COUNTER = "%02d:%02d";
     private static final String DISPLAY_START = "%02d:00";
-    private static final String CYCLE_POMODORO = "cycle_pomodoro";
-    private static final String CYCLE_BREAK = "cycle_break";
+    private static final String CYCLE_POMODORO = "POMODORO";
+    private static final String CYCLE_SHORT_BREAK = "SHORT BREAK";
+    private static final String CYCLE_LONG_BREAK = "LONG BREAK";
 
     private int timeMinPomodoro;
     private int timeMinShortBreak;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private boolean autoStart;
     private boolean isRunning;
+    private boolean isPaused;
 
     private String soundPomodoro;
     private String soundShortBreak;
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private String currentCycle = "";
 
     private CountDownTimer timer;
+    private Handler handler;
+    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,24 +59,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         setupSharedPreferences();
 
-        nextSection();
+        setPomodoro();
 
         bd.buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPomodoro();
-            }
-        });
-
-        bd.buttonPause.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                bd.buttonStart.setVisibility(View.VISIBLE);
-                bd.buttonPause.setVisibility(View.INVISIBLE);
-                if(timer != null){
-                    timer.cancel();
-                    timer = null;
+                if (isPaused) {
+                    startCounter();
+                } else {
+                    bd.buttonStart.setText(getString(R.string.continue_label));
+                    counterInSecs++;
+                    isPaused = true;
+                    if(timer != null){
+                        timer.cancel();
+                        timer = null;
+                    }
                 }
             }
         });
@@ -84,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     timer.cancel();
                     timer = null;
                 }
-                counterPomodoro = 0;
-                currentCycle = "";
-                nextSection();
+                setPomodoro();
             }
         });
     }
@@ -96,6 +96,40 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.settings_auto_start_timer_key))) {
+            autoStart = sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.settings_auto_start_timer_default));
+        } else if (key.equals(getString(R.string.settings_pomodoro_sound_key))) {
+            loadSoundPomodoroFromSharedPreferences(sharedPreferences);
+        } else if (key.equals(getString(R.string.settings_pomodoro_time_key))) {
+            loadTimePomodoroFromSharedPreferences(sharedPreferences);
+        } else if (key.equals(getString(R.string.settings_short_break_time_key))) {
+            loadTimeShortBreakFromSharedPreferences(sharedPreferences);
+        } else if (key.equals(getString(R.string.settings_long_break_time_key))) {
+            loadTimeLongBreakFromSharedPreferences(sharedPreferences);
+        } else if (key.equals(getString(R.string.settings_long_break_freq_time_key))) {
+            loadTimeLongBreakFreqFromSharedPreferences(sharedPreferences);
+        }
     }
 
     private void setupSharedPreferences() {
@@ -122,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         timeMinPomodoro = Integer.parseInt(sharedPreferences.getString(getString(R.string.settings_pomodoro_time_key),
                 getString(R.string.settings_pomodoro_time_default)));
         if (!isRunning) {
-            bd.textViewCounter.setText(String.format(DISPLAY_START, timeMinPomodoro));
+            setPomodoro();
         }
     }
 
@@ -156,95 +190,74 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 getString(R.string.settings_long_break_sound_default));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
+    private void startCounter() {
+        if (!isRunning) {
+            isRunning = true;
         }
-        return super.onOptionsItemSelected(item);
-    }
+        if (isPaused) {
+            bd.buttonStart.setText(getString(R.string.pause));
+            isPaused = false;
+        }
 
-    private void startPomodoro() {
-        bd.buttonStart.setVisibility(View.INVISIBLE);
-        bd.buttonPause.setVisibility(View.VISIBLE);
-        timer = startCounter();
-        timer.start();
-    }
-
-    private CountDownTimer startCounter() {
-        isRunning = true;
-        return new CountDownTimer(counterInSecs*TIME_RATE_MILISEC, TIME_RATE_MILISEC) {
+        timer = new CountDownTimer(counterInSecs*TIME_RATE_MILISEC, TIME_RATE_MILISEC) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int timerMinutes = counterInSecs / TIME_MIN_TO_SEC;
                 int timerSeconds = counterInSecs % TIME_MIN_TO_SEC;
-                bd.textViewCounter.setText(String.format(DISPLAY_DISPLAY, timerMinutes, timerSeconds));
+                bd.textViewCounter.setText(String.format(DISPLAY_COUNTER, timerMinutes, timerSeconds));
                 counterInSecs--;
-
             }
 
             @Override
             public void onFinish() {
                 nextSection();
                 if (autoStart) {
-                    startPomodoro();
+                    startCounter();
+                } else{
+                    bd.buttonStart.setText(getString(R.string.start));
+                    isPaused = true;
                 }
             }
         };
+
+        timer.start();
     }
 
     private void nextSection() {
-        isRunning = false;
-        bd.buttonStart.setVisibility(View.VISIBLE);
-        bd.buttonPause.setVisibility(View.INVISIBLE);
-
-        int counterInMins = 0;
+        int counterInMin;
 
         if (currentCycle.equals(CYCLE_POMODORO)) {
             counterPomodoro++;
-            currentCycle = CYCLE_BREAK;
             if ((counterPomodoro % sectionsToLongBreak) != 0) {
-                counterInMins = timeMinShortBreak;
-                bd.textViewCycle.setText("SHORT BREAK");
+                counterInMin = timeMinShortBreak;
+                currentCycle = CYCLE_SHORT_BREAK;
             } else {
-                counterInMins = timeMinLongBreak;
-                bd.textViewCycle.setText("LONG BREAK");
+                counterInMin = timeMinLongBreak;
+                currentCycle = CYCLE_LONG_BREAK;
             }
         } else {
             currentCycle = CYCLE_POMODORO;
-            counterInMins = timeMinPomodoro;
-            bd.textViewCycle.setText("POMODORO");
+            counterInMin = timeMinPomodoro;
         }
 
-        counterInSecs = counterInMins * TIME_MIN_TO_SEC;
-        bd.textViewCounter.setText(String.format(DISPLAY_START, counterInMins));
+        counterInSecs = counterInMin * TIME_MIN_TO_SEC;
+
+        bd.textViewCycle.setText(currentCycle);
+        bd.textViewCounter.setText(String.format(DISPLAY_START, counterInMin));
         bd.textViewCounterPomos.setText(String.format("%d %s%s",
                 counterPomodoro, getString(R.string.pomodoro), counterPomodoro == 1 ? "" : "s"));
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.settings_auto_start_timer_key))) {
-            autoStart = sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.settings_auto_start_timer_default));
-        } else if (key.equals(getString(R.string.settings_pomodoro_sound_key))) {
-            loadSoundPomodoroFromSharedPreferences(sharedPreferences);
-        } else if (key.equals(getString(R.string.settings_pomodoro_time_key))) {
-            loadTimePomodoroFromSharedPreferences(sharedPreferences);
-        } else if (key.equals(getString(R.string.settings_short_break_time_key))) {
-            loadTimeShortBreakFromSharedPreferences(sharedPreferences);
-        } else if (key.equals(getString(R.string.settings_long_break_time_key))) {
-            loadTimeLongBreakFromSharedPreferences(sharedPreferences);
-        } else if (key.equals(getString(R.string.settings_long_break_freq_time_key))) {
-            loadTimeLongBreakFreqFromSharedPreferences(sharedPreferences);
-        }
+    private void setPomodoro() {
+        counterPomodoro = 0;
+        isPaused = true;
+        isRunning = false;
+        currentCycle = CYCLE_POMODORO;
+        counterInSecs = timeMinPomodoro * TIME_MIN_TO_SEC;
+
+        bd.buttonStart.setText(getString(R.string.start));
+        bd.textViewCycle.setText(currentCycle);
+        bd.textViewCounter.setText(String.format(DISPLAY_START, timeMinPomodoro));
+        bd.textViewCounterPomos.setText(String.format("0 %s", getString(R.string.pomodoro)));
     }
 }

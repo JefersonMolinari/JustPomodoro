@@ -3,7 +3,7 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="pause">Pause</string>
-    <string name="reset">Reset</string>
+    <string name="continue_label">Continue</string>
     <string name="settings_title">Settings</string>
     <string name="pomodoro">Pomodoro</string>
 
