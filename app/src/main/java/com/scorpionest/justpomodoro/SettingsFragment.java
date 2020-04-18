@@ -51,8 +51,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnShar
         toBeImplementedToast(toast, getString(R.string.settings_config_vibrate_key));
         toBeImplementedToast(toast, getString(R.string.settings_config_rotate_key));
         toBeImplementedToast(toast, getString(R.string.settings_config_prevent_screen_lock_key));
-        toBeImplementedToast(toast, getString(R.string.settings_sound_timer_start_key));
-        toBeImplementedToast(toast, getString(R.string.settings_sound_timer_end_key));
+//        toBeImplementedToast(toast, getString(R.string.settings_sound_timer_start_key));
+//        toBeImplementedToast(toast, getString(R.string.settings_sound_timer_end_key));
         toBeImplementedToast(toast, getString(R.string.settings_pomodoro_sound_key));
         toBeImplementedToast(toast, getString(R.string.settings_short_break_sound_key));
         toBeImplementedToast(toast, getString(R.string.settings_long_break_sound_key));
