@@ -38,15 +38,19 @@ public class MediaPlayerUtil {
     public void start(int sound) {
         this.sound = sound;
         releaseMediaPlayer();
-        mediaPlayer = MediaPlayer.create(context, sound);
-        mediaPlayer.setAudioAttributes(attributes);
-        mediaPlayer.setLooping(looping);
-        mediaPlayer.start();
-        mediaPlayer.setOnCompletionListener(completionListener);
+        if (!(sound == 0)) {
+            mediaPlayer = MediaPlayer.create(context, sound);
+            mediaPlayer.setAudioAttributes(attributes);
+            mediaPlayer.setLooping(looping);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(completionListener);
+        }
     }
 
     public void pause() {
-        mediaPlayer.pause();
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
     }
 
     public void stop() {

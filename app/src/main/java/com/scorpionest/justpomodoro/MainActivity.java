@@ -7,8 +7,6 @@ import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -22,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     ActivityMainBinding bd;
 
-    private static final int TIME_RATE_MILISEC = 100;
+    private static final int TIME_RATE_MILISEC = 1000;
     private static final int TIME_MIN_TO_SEC = 60;
     private static final String DISPLAY_COUNTER = "%02d:%02d";
     private static final String DISPLAY_START = "%02d:00";
@@ -45,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private String soundShortBreak;
     private String soundLongBreak;
 
+    private int soundPomodoroInt;
+    private int soundShortBreakInt;
+    private int soundLongBreakInt;
+    private int currentBgSound;
+
+
     private final int NOTIFICATION_START_SOUND = R.raw.bell_sound;;
     private final int NOTIFICATION_END_SOUND = R.raw.bell_sound;;
 
@@ -63,9 +67,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-// DONE create a class extends from MediaPlayer, move methods and variables to new class.
-// TODO bind notification sound to menu checkbox
-// TODO bind bg sound to list menu, inclune none as option. None does not play sound
 
         bgMp = new MediaPlayerUtil(this, true);
         notificaionStartMp = new MediaPlayerUtil(this, false);
@@ -83,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (isPaused) {
                     startCounter();
                 } else {
-                    bgMp.pause();
                     bd.buttonStart.setText(getString(R.string.continue_label));
                     counterInSecs++;
                     isPaused = true;
+                    bgMp.stop();
                     if(timer != null){
                         timer.cancel();
                         timer = null;
@@ -147,6 +148,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             loadTimeLongBreakFreqFromSharedPreferences(sharedPreferences);
         } else if (key.equals(getString(R.string.settings_pomodoro_sound_key))) {
             loadSoundPomodoroFromSharedPreferences(sharedPreferences);
+        } else if (key.equals(getString(R.string.settings_short_break_sound_key))) {
+            loadSoundShortBreakFromSharedPreferences(sharedPreferences);
+        } else if (key.equals(getString(R.string.settings_long_break_sound_key))) {
+            loadSoundLongBreakFromSharedPreferences(sharedPreferences);
         } else if (key.equals(getString(R.string.settings_sound_timer_start_key))) {
             loadPlaySoundStartFromSharedPreferences(sharedPreferences);
         } else if (key.equals(getString(R.string.settings_sound_timer_end_key))) {
@@ -217,23 +222,46 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private void loadSoundPomodoroFromSharedPreferences(SharedPreferences sharedPreferences) {
         soundPomodoro = sharedPreferences.getString(getString(R.string.settings_pomodoro_sound_key),
                 getString(R.string.settings_pomodoro_sound_default));
+
+        soundPomodoroInt = setBgSound(soundPomodoro, CYCLE_POMODORO);
     }
 
     private void loadSoundShortBreakFromSharedPreferences(SharedPreferences sharedPreferences) {
         soundShortBreak = sharedPreferences.getString(getString(R.string.settings_short_break_sound_key),
                 getString(R.string.settings_short_break_sound_default));
+
+        soundShortBreakInt = setBgSound(soundShortBreak, CYCLE_SHORT_BREAK);
     }
 
     private void loadSoundLongBreakFromSharedPreferences(SharedPreferences sharedPreferences) {
         soundLongBreak = sharedPreferences.getString(getString(R.string.settings_long_break_sound_key),
                 getString(R.string.settings_long_break_sound_default));
+
+        soundLongBreakInt = setBgSound(soundLongBreak, CYCLE_LONG_BREAK);
+    }
+
+    private int setBgSound(String sound, String cycle) {
+        int soundInt;
+        if (sound.equals(getString(R.string.settings_sound_option_wilderness_value))) {
+            soundInt = R.raw.wilderness_sound;
+        } else{
+            soundInt = 0;
+        }
+        if (currentCycle.equals(cycle)) {
+            currentBgSound = soundInt;
+            if (isRunning && !isPaused) {
+                bgMp.start(soundInt);
+            }
+        }
+
+        return soundInt;
     }
 
     private void startCounter() {
         if (playSoundTimeStart) {
             notificaionStartMp.start(NOTIFICATION_START_SOUND);
         }
-        bgMp.start(R.raw.wild_life_sound);
+        bgMp.start(currentBgSound);
 
         if (!isRunning) {
             isRunning = true;
@@ -279,13 +307,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if ((counterPomodoro % sectionsToLongBreak) != 0) {
                 counterInMin = timeMinShortBreak;
                 currentCycle = CYCLE_SHORT_BREAK;
+                currentBgSound = soundShortBreakInt;
             } else {
                 counterInMin = timeMinLongBreak;
                 currentCycle = CYCLE_LONG_BREAK;
+                currentBgSound = soundLongBreakInt;
             }
         } else {
             currentCycle = CYCLE_POMODORO;
             counterInMin = timeMinPomodoro;
+            currentBgSound = soundPomodoroInt;
         }
 
         counterInSecs = counterInMin * TIME_MIN_TO_SEC;
@@ -301,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         isPaused = true;
         isRunning = false;
         currentCycle = CYCLE_POMODORO;
+        currentBgSound = soundPomodoroInt;
         counterInSecs = timeMinPomodoro * TIME_MIN_TO_SEC;
 
         bd.buttonStart.setText(getString(R.string.start));

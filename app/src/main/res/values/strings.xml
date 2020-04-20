@@ -45,27 +45,27 @@
     <string name="settings_sound_timer_end_label">Play sound when timer ends</string>
 
     <!-- Strings For Pomodoro Sound Preference [CHAR LIMIT=30] -->
-    <string name="settings_pomodoro_sound_default" translatable="false">@string/settings_sound_option_one_value</string>
+    <string name="settings_pomodoro_sound_default" translatable="false">@string/settings_sound_option_none_value</string>
     <string name="settings_pomodoro_sound_key" translatable="false">pomodoro_sound</string>
     <string name="settings_pomodoro_sound_label">Pomodoro Sound</string>
 
     <!-- Strings For Short Break Sound Preference [CHAR LIMIT=30] -->
-    <string name="settings_short_break_sound_default" translatable="false">@string/settings_sound_option_one_value</string>
+    <string name="settings_short_break_sound_default" translatable="false">@string/settings_sound_option_none_value</string>
     <string name="settings_short_break_sound_key" translatable="false">short_break_sound</string>
     <string name="settings_short_break_sound_label">Short Break Sound</string>
 
     <!-- Strings For Long Break Sound Preference [CHAR LIMIT=30] -->
-    <string name="settings_long_break_sound_default" translatable="false">@string/settings_sound_option_one_value</string>
+    <string name="settings_long_break_sound_default" translatable="false">@string/settings_sound_option_none_value</string>
     <string name="settings_long_break_sound_key" translatable="false">long_break_sound</string>
     <string name="settings_long_break_sound_label">Long Break Sound</string>
 
     <!-- Label for pomodoro_sound option [CHAR LIMIT=20] -->
-    <string name="settings_sound_option_one_label">Sound One</string>
-    <string name="settings_sound_option_one_value" translatable="false">sound_option_one</string>
+    <string name="settings_sound_option_none_label">None</string>
+    <string name="settings_sound_option_none_value" translatable="false">none</string>
 
     <!-- Label for pomodoro_sound option [CHAR LIMIT=20] -->
-    <string name="settings_sound_option_two_label">Sound Two</string>
-    <string name="settings_sound_option_two_value" translatable="false">sound_option_two</string>
+    <string name="settings_sound_option_wilderness_label">Wilderness</string>
+    <string name="settings_sound_option_wilderness_value" translatable="false">wild_life_sound</string>
 
     <!-- Label for pomodoro_sound option [CHAR LIMIT=20] -->
     <string name="settings_sound_option_three_label">Sound Three</string>
