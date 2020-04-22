@@ -89,5 +89,6 @@
 
     <string name="settings_checkbox_unchecked_label">Not Enabled</string>
     <string name="settings_checkbox_checked_label">Enabled</string>
+    <string name="done">Done</string>
 
 </resources>

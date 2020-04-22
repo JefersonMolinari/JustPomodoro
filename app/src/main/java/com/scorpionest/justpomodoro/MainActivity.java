@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     ActivityMainBinding bd;
 
-    private static final int TIME_RATE_MILISEC = 1000;
+    private static final int TIME_RATE_MILISEC = 100;
     private static final int TIME_MIN_TO_SEC = 60;
     private static final String DISPLAY_COUNTER = "%02d:%02d";
     private static final String DISPLAY_START = "%02d:00";
@@ -81,18 +81,34 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         bd.buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isPaused) {
-                    startCounter();
+                if (currentCycle.equals(CYCLE_POMODORO)) {
+                    if (isPaused) {
+                        startCounter();
+                    } else {
+                        bd.buttonStart.setText(getString(R.string.continue_label));
+                        counterInSecs++;
+                        isPaused = true;
+                        bgMp.stop();
+                        if (timer != null) {
+                            timer.cancel();
+                            timer = null;
+                        }
+                    }
                 } else {
-                    bd.buttonStart.setText(getString(R.string.continue_label));
-                    counterInSecs++;
-                    isPaused = true;
-                    bgMp.stop();
-                    if(timer != null){
+                    if (timer != null) {
                         timer.cancel();
                         timer = null;
                     }
+                    bgMp.stop();
+                    nextSection();
+                    if (autoStart) {
+                        startCounter();
+                    } else{
+                        bd.buttonStart.setText(getString(R.string.start));
+                        isPaused = true;
+                    }
                 }
+
             }
         });
 
@@ -266,10 +282,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (!isRunning) {
             isRunning = true;
         }
-        if (isPaused) {
-            bd.buttonStart.setText(getString(R.string.pause));
-            isPaused = false;
+        if (currentCycle.equals(CYCLE_POMODORO)) {
+            if (isPaused) {
+                bd.buttonStart.setText(getString(R.string.pause));
+                isPaused = false;
+            }
+        } else {
+            bd.buttonStart.setText(getString(R.string.done));
+            isPaused = true;
         }
+
 
         timer = new CountDownTimer(counterInSecs*TIME_RATE_MILISEC, TIME_RATE_MILISEC) {
             @Override
